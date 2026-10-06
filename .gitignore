@@ -1,0 +1,5 @@
+# Written by apps next to stowed configs; never commit.
+fish_variables
+.gitconfig.local
+local.fish
+local.conf

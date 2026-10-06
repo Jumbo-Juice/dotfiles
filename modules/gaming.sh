@@ -115,6 +115,24 @@ fedora_secure_boot_key() {
   note "Secure Boot: the akmods key must be enrolled at the next boot (MOK screen) or the Nvidia module will not load."
 }
 
+# akmod-nvidia pulls kernel-devel for the newest kernel, which drags in only
+# its kernel-core + kernel-modules-core. Without kernel-modules (i915,
+# iwlwifi) that kernel boots at 800x600 with no wifi, so complete it.
+fedora_complete_kernels() {
+  local v pkgs extra=0
+  rpm -q --quiet kernel-core || return 0
+  rpm -q --quiet kernel-modules-extra && extra=1
+  while IFS= read -r v; do
+    rpm -q --quiet "kernel-modules-$v" && continue
+    pkgs=("kernel-$v" "kernel-modules-$v")
+    ((extra)) && pkgs+=("kernel-modules-extra-$v")
+    sudo dnf install -y "${pkgs[@]}"
+    sudo dracut --force --kver "$v"
+    changed "completed kernel $v (installed ${pkgs[*]}, rebuilt initramfs)"
+    DRIVER_INSTALLED=1
+  done < <(rpm -q --qf '%{VERSION}-%{RELEASE}.%{ARCH}\n' kernel-core)
+}
+
 driver_fedora() {
   if rpm -q --quiet akmod-nvidia; then
     ok "akmod-nvidia installed"
@@ -138,6 +156,7 @@ driver_fedora() {
       die "nvidia kernel module did not build; check 'journalctl -u akmods' and /var/cache/akmods"
     ok "nvidia module $(modinfo -F version nvidia) built"
   fi
+  is_test || fedora_complete_kernels
   pkg_install xorg-x11-drv-nvidia-libs.i686
   pkg_install switcheroo-control
   svc_enable switcheroo-control

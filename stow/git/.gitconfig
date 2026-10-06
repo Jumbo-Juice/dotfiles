@@ -1,0 +1,20 @@
+# Stowed from ~/dotfiles. Machine-specific settings: ~/.gitconfig.local
+[user]
+	name = Juji_Vong
+	email = 198972676+Jumbo-Juice@users.noreply.github.com
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
+[rebase]
+	autoStash = true
+[push]
+	autoSetupRemote = true
+[fetch]
+	prune = true
+[diff]
+	colorMoved = default
+[core]
+	autocrlf = input
+[include]
+	path = ~/.gitconfig.local

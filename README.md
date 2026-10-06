@@ -250,8 +250,8 @@ embedded terminal) the script reruns itself via `systemd-run --user`; you
 must be logged in to the desktop:
 
 ```sh
-bash ~/dotfiles/theme/display-profile.sh            # saturation 0.9, gamma 2.0
-bash ~/dotfiles/theme/display-profile.sh 0.8 1.9    # stronger (1 2.2 = accurate)
+bash ~/dotfiles/theme/display-profile.sh            # saturation 0.5, gamma 1.6 (strongest)
+bash ~/dotfiles/theme/display-profile.sh 0.7 1.8    # milder (1 2.2 = accurate)
 bash ~/dotfiles/theme/display-profile.sh --off      # back to no profile
 ```
 

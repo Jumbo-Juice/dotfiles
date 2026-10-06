@@ -6,8 +6,8 @@
 # GAMMA. Mutter's colour transform then raises saturation and midtone
 # contrast. The profile goes to ~/.local/share/icc and becomes the panel's
 # default in colord (Settings > Color lists it as "Vivid ...").
-#   theme/display-profile.sh              apply (SAT=0.9 GAMMA=2.0)
-#   theme/display-profile.sh 0.8 1.9      stronger; 1 2.2 is plain EDID-accurate
+#   theme/display-profile.sh              apply (SAT=0.5 GAMMA=1.6, the strongest)
+#   theme/display-profile.sh 0.7 1.8      milder; 1 2.2 is plain EDID-accurate
 #   theme/display-profile.sh --off        remove it (back to no profile)
 set -euo pipefail
 
@@ -20,7 +20,7 @@ cm() {
   printf '%s\n' "$out"
 }
 
-off=0 sat=0.9 gamma=2.0
+off=0 sat=0.5 gamma=1.6
 case ${1:-} in
   --off) off=1 ;;
   -h | --help) sed -n '2,11p' "$0"; exit 0 ;;

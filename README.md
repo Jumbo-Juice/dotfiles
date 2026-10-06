@@ -164,7 +164,6 @@ lib/common.sh           distro detection, logging, package helpers, sudo keepali
 theme/palette.sh        the colours (single source of truth)
 theme/render.sh         templates -> stow/ (outputs are committed)
 theme/gnome-shell.sh    builds the square GNOME Shell theme into ~/.local/share/themes
-theme/display-profile.sh  vivid ICC profile for the built-in panel (run by hand)
 theme/templates/        kitty, fish, starship, MangoHud, GTK templates
 stow/<pkg>/...          linked into $HOME: fish, starship, kitty, git, mangohud, gtk
 browser/zen-stylus.css  Stylus theme for Zen (import by hand)
@@ -238,22 +237,3 @@ gsettings set org.gnome.desktop.interface accent-color orange
 
 Log out and back in once (Wayland cannot restart the shell). Re-run
 `theme/gnome-shell.sh` after a palette change or a gnome-shell update.
-
-### Display colour (built-in panel)
-
-The G531GV's panel covers about 60% of sRGB, so with no profile it looks
-washed out. `theme/display-profile.sh` builds an ICC profile from the panel's
-EDID primaries, pulled towards white, with a lower gamma. Mutter's colour
-transform then raises saturation and midtone contrast. colord only lets the
-active desktop session change a display, so from a shell outside it (ssh, an
-embedded terminal) the script reruns itself via `systemd-run --user`; you
-must be logged in to the desktop:
-
-```sh
-bash ~/dotfiles/theme/display-profile.sh            # saturation 0.5, gamma 1.6 (strongest)
-bash ~/dotfiles/theme/display-profile.sh 0.7 1.8    # milder (1 2.2 = accurate)
-bash ~/dotfiles/theme/display-profile.sh --off      # back to no profile
-```
-
-It shows up in Settings > Color as "Vivid eDP-1 (...)". Reruns with the same
-settings change nothing.

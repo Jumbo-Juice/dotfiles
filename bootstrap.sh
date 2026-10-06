@@ -176,8 +176,13 @@ step_git_gh() {
   local key="$HOME/.ssh/id_ed25519"
   if [[ -f "$key" ]]; then
     ok "SSH key exists: $key"
-  else
+  elif is_test; then
     ssh-keygen -q -t ed25519 -C "${USER}@${DOTFILES_HOSTNAME}" -N "" -f "$key"
+    changed "generated $key (no passphrase, test mode)"
+  else
+    # ssh-keygen asks twice and re-asks by itself until both entries match.
+    info "Choose a passphrase for the new SSH key (typing is hidden)."
+    ssh-keygen -q -t ed25519 -C "${USER}@${DOTFILES_HOSTNAME}" -f "$key"
     changed "generated $key"
   fi
   pin_github_host_keys

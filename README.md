@@ -55,7 +55,7 @@ password once per run.
    `tailscale up --ssh --hostname=arnold`. The login URL is printed in a box.
    Once you've logged in, you can finish the setup remotely: `ssh juji@arnold`.
 3. git and gh (gh comes from GitHub's apt repo on Ubuntu). Creates
-   `~/.ssh/id_ed25519` (`juji@Arnold`), logs in with `gh auth login --web`
+   `~/.ssh/id_ed25519` (`juji@Arnold`, asks you for a passphrase), logs in with `gh auth login --web`
    (scope `admin:public_key`), uploads the key as `Arnold-<distro>-<date>`,
    and switches `~/dotfiles` to the SSH remote.
 4. fish, set as the login shell.

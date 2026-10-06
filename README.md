@@ -163,8 +163,9 @@ modules/{gaming,docker,dev}.sh
 lib/common.sh           distro detection, logging, package helpers, sudo keepalive
 theme/palette.sh        the colours (single source of truth)
 theme/render.sh         templates -> stow/ (outputs are committed)
-theme/templates/        kitty, fish, starship, MangoHud templates
-stow/<pkg>/...          linked into $HOME: fish, starship, kitty, git, mangohud
+theme/gnome-shell.sh    builds the square GNOME Shell theme into ~/.local/share/themes
+theme/templates/        kitty, fish, starship, MangoHud, GTK templates
+stow/<pkg>/...          linked into $HOME: fish, starship, kitty, git, mangohud, gtk
 browser/zen-stylus.css  Stylus theme for Zen (import by hand)
 tests/                  container tests (see below)
 ```
@@ -190,7 +191,7 @@ To change a colour:
 ```sh
 $EDITOR ~/dotfiles/theme/palette.sh
 bash ~/dotfiles/theme/render.sh          # rewrites the files under stow/
-stow -d ~/dotfiles/stow -t ~ --no-folding -R fish kitty starship git mangohud
+stow -d ~/dotfiles/stow -t ~ --no-folding -R fish kitty starship git mangohud gtk
 ```
 
 The rendered files are symlinked, so kitty (`ctrl+shift+f5`), fish (new shell)
@@ -219,3 +220,20 @@ are installed. Containers run `--privileged` (Flatpak's bubblewrap needs it),
 and a no-op `systemctl` shim stands in for systemd.
 
 Lint: `shellcheck -x bootstrap.sh lib/*.sh modules/*.sh theme/*.sh tests/*.sh`.
+
+### GNOME (Fedora)
+
+`gtk` squares and recolours GTK 3 and GTK 4/libadwaita apps. The shell (top
+bar, overview, menus) needs a user theme, built from the installed shell's own
+stylesheet so it follows shell updates:
+
+```sh
+sudo dnf install gnome-shell-extension-user-theme
+bash ~/dotfiles/theme/gnome-shell.sh
+gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com
+gsettings set org.gnome.shell.extensions.user-theme name zen-square
+gsettings set org.gnome.desktop.interface accent-color orange
+```
+
+Log out and back in once (Wayland cannot restart the shell). Re-run
+`theme/gnome-shell.sh` after a palette change or a gnome-shell update.

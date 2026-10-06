@@ -16,6 +16,8 @@ TARGETS=(
   "fish-theme.fish:stow/fish/.config/fish/conf.d/theme.fish"
   "starship.toml:stow/starship/.config/starship.toml"
   "MangoHud.conf:stow/mangohud/.config/MangoHud/MangoHud.conf"
+  "gtk.css:stow/gtk/.config/gtk-3.0/gtk.css"
+  "gtk.css:stow/gtk/.config/gtk-4.0/gtk.css"
 )
 
 sed_args=()
